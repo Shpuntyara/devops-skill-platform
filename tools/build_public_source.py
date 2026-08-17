@@ -105,7 +105,7 @@ def public_files(catalog: dict) -> list[Path]:
         files.extend(safe_tree(ROOT / tree))
     for skill in sorted(catalog["skills"]):
         files.extend(safe_tree(ROOT / skill))
-    unique = sorted(set(files))
+    unique = sorted(set(files), key=lambda path: path.relative_to(ROOT).as_posix())
     if len(unique) != len(files):
         raise ValueError("public source allowlist contains duplicate paths")
     return unique
@@ -157,6 +157,7 @@ def main() -> int:
                     raise ValueError(f"possible {label} in public source file {relative.as_posix()}")
             payloads[relative] = data
             entries.append({"path": relative.as_posix(), "sha256": sha256(data), "size": len(data)})
+        entries.sort(key=lambda item: item["path"])
         output.mkdir(parents=True, exist_ok=True)
         for relative, data in payloads.items():
             destination = output / relative

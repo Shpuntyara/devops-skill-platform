@@ -337,6 +337,7 @@ class PlatformTests(unittest.TestCase):
                 manifest = json.loads(archive.read("RELEASE-MANIFEST.json"))
                 self.assertEqual(manifest["license"], "Apache-2.0")
                 self.assertEqual(manifest["version"], "0.3.0")
+                self.assertEqual([item["path"] for item in manifest["files"]], sorted(item["path"] for item in manifest["files"]))
                 unpacked = Path(directory) / "unpacked"
                 archive.extractall(unpacked)
             installed = Path(directory) / "installed"
@@ -374,6 +375,7 @@ class PlatformTests(unittest.TestCase):
             self.assertTrue({".github/workflows/validate.yml", "tests/test_platform.py", "tools/build_release.py"} <= paths)
             self.assertFalse(any(path.startswith(("operations/", "lab-artifacts/", ".git/", "dist/")) for path in paths))
             manifest = json.loads((output / "PUBLIC-SOURCE-MANIFEST.json").read_text(encoding="utf-8"))
+            self.assertEqual([item["path"] for item in manifest["files"]], sorted(item["path"] for item in manifest["files"]))
             declared = {item["path"]: item for item in manifest["files"]}
             self.assertEqual(set(declared), paths - {"PUBLIC-SOURCE-MANIFEST.json"})
             for relative, item in declared.items():
