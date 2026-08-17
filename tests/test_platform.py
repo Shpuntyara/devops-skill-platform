@@ -331,6 +331,7 @@ class PlatformTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             with zipfile.ZipFile(first) as archive:
                 names = set(archive.namelist())
+                self.assertTrue(all(info.create_system == 3 for info in archive.infolist()))
                 self.assertTrue({"LICENSE", "README.md", "SECURITY.md", "GOVERNANCE.md", "SUPPORT.md", "CONTRIBUTING.md", "CHANGELOG.md", "tools/install.py", "tools/verify_release.py"} <= names)
                 self.assertFalse(any(name.startswith(("lab-artifacts/", "operations/", ".github/")) for name in names))
                 manifest = json.loads(archive.read("RELEASE-MANIFEST.json"))
@@ -377,6 +378,7 @@ class PlatformTests(unittest.TestCase):
             self.assertEqual(set(declared), paths - {"PUBLIC-SOURCE-MANIFEST.json"})
             for relative, item in declared.items():
                 data = (output / relative).read_bytes()
+                self.assertNotIn(b"\r", data)
                 self.assertEqual(item["sha256"], "sha256:" + hashlib.sha256(data).hexdigest())
                 self.assertEqual(item["size"], len(data))
             blocked = self.command(ROOT / "tools/build_public_source.py", "--output", output)

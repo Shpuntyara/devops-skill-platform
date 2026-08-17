@@ -149,7 +149,9 @@ def main() -> int:
         for source in public_files(catalog):
             relative = source.relative_to(ROOT)
             validate_relative(relative)
-            data = source.read_bytes()
+            data = source.read_bytes().replace(b"\r\n", b"\n")
+            if b"\r" in data:
+                raise ValueError(f"stray CR character in public source file {relative.as_posix()}")
             for label, pattern in SECRET_PATTERNS.items():
                 if pattern.search(data):
                     raise ValueError(f"possible {label} in public source file {relative.as_posix()}")
