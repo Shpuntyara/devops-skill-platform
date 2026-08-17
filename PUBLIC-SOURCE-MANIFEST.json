@@ -10,8 +10,8 @@
   "files": [
     {
       "path": ".gitattributes",
-      "sha256": "sha256:6ccf4f4803fc2bdf8c1bb9b15011696917125b57773abcb67cdf5b8e8771faa4",
-      "size": 253
+      "sha256": "sha256:ff26bef30b84d958679a20f509a2f73d1433eb79956787125892ce8f8ba24972",
+      "size": 304
     },
     {
       "path": ".github/CODEOWNERS",

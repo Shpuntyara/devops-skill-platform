@@ -9,4 +9,6 @@
 *.ps1 text eol=lf
 *.sh text eol=lf
 *.txt text eol=lf
+LICENSE text eol=lf
+.github/CODEOWNERS text eol=lf
 linux-operations/scripts/host-audit text eol=lf
